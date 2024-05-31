@@ -7,7 +7,7 @@ WORKDIR /app
 RUN npm install express
 
 COPY dist ./dist
-COPY server_user.js ./server.js
+COPY server_user.js ./server_user.js
 
 # Thiết lập biến môi trường để ứng dụng Node.js sử dụng cổng
 ENV PORT=3000
@@ -16,4 +16,4 @@ ENV PORT=3000
 EXPOSE 3000
 
 # Chạy ứng dụng
-CMD ["node", "server.js"]
+CMD ["node", "server_user.js"]
