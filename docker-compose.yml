@@ -1,7 +1,9 @@
 version: "3.8"
 services:
   mysql:
-    image: mysql:8.0
+    build:
+      context: ./mysql
+      dockerfile: Dockerfile
     environment:
       MYSQL_DATABASE: coco
       MYSQL_ROOT_PASSWORD: root
