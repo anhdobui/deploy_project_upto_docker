@@ -65,20 +65,17 @@ def etl_process(mysql_cursor, sqlserver_cursor, table_name):
                     sqlserver_cursor.execute(insert_query, values)
                     etl_success_count += 1
                 except pymssql.IntegrityError:
-                    # Nếu xảy ra lỗi trùng lặp
                     # Nếu xảy ra lỗi trùng lặp khóa chính, thực hiện cập nhật
                     update_values = tuple([row[col] for col in columns if col != 'id']) + (row['id'],)
                     sqlserver_cursor.execute(update_query, update_values)
                     etl_success_count += 1
+                # Commit sau mỗi lần insert/update
+                sqlserver_cursor.connection.commit()
 
-            sqlserver_conn.commit()
-            # Cập nhật thời gian chi tiết nhất có thể
-            last_sync_times[table_name] = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+            last_sync_times[table_name] = datetime.now()
             logging.info(
                 f"ETL process for {table_name} successful. ETL'd {etl_success_count} records."
             )
-
-        # Đóng kết nối MySQL sau khi xử lý xong
     except Exception as e:
         logging.error(f"Error in ETL process for {table_name}: {str(e)}")
 
