@@ -601,6 +601,28 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+ALTER TABLE [dwh_htttql].[dbo].[dim_date]
+ADD month_abbr VARCHAR(3);
+GO
+-- Cập nhật dữ liệu cho cột month_abbr
+UPDATE [dwh_htttql].[dbo].[dim_date]
+SET month_abbr = 
+    CASE DATENAME(month, [date])
+        WHEN 'January' THEN 'Jan'
+        WHEN 'February' THEN 'Feb'
+        WHEN 'March' THEN 'Mar'
+        WHEN 'April' THEN 'Apr'
+        WHEN 'May' THEN 'May'
+        WHEN 'June' THEN 'Jun'
+        WHEN 'July' THEN 'Jul'
+        WHEN 'August' THEN 'Aug'
+        WHEN 'September' THEN 'Sep'
+        WHEN 'October' THEN 'Oct'
+        WHEN 'November' THEN 'Nov'
+        WHEN 'December' THEN 'Dec'
+        ELSE ''
+    END;
+GO
 CREATE TABLE [dbo].[dim_painting](
 	[painting_scd_id] [int] IDENTITY(1,1) NOT NULL,
 	[painting_id] [int] NULL,
